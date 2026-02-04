@@ -41,15 +41,14 @@ const adminLogin = async (req, res) => {
       throw new apiError(404, "Admin not found");
     }
 
-    // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       throw new apiError(401, "Invalid credentials");
     }
-    // Generate tokens
+
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
-    // Save refresh token to user document
+
     user.refreshToken = refreshToken;
     await user.save();
     res.status(200).json(

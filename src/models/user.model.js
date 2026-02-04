@@ -26,15 +26,13 @@ const userSchema = new Schema(
 );
 
 userSchema.methods.comparePassword = async function (pswd) {
-  // Implement password comparison logic (e.g., using bcrypt)
-  return bcrypt.compare(pswd, this.password); // Placeholder logic
+  return bcrypt.compare(pswd, this.password);
 };
 
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);
   }
-  // next();
 });
 
 userSchema.methods.generateAccessToken = function () {
