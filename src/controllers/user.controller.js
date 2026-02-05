@@ -6,7 +6,7 @@ const adminLogin = async (req, res) => {
     console.log("Admin login attempt:", req.body);
     const { email, password } = req.body;
     if (!email || !password) {
-      throw new ApiError(400, "Email and password are required");
+      throw ApiError.badRequest("Email and password are required");
     }
     const { user, accessToken, refreshToken } = await adminLoginService(
       email,
