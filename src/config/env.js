@@ -11,4 +11,11 @@ const env = {
   REFRESH_EXPIRY: process.env.REFRESH_EXPIRY,
 };
 
-export default env;
+export const {
+  PORT,
+  DB_URL,
+  ACCESS_SECRET,
+  ACCESS_EXPIRY,
+  REFRESH_SECRET,
+  REFRESH_EXPIRY,
+} = env;

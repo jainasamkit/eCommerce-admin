@@ -1,6 +1,7 @@
 import express from "express";
 import { errorHandler } from "./middleware/errorHandler.js";
 import v1router from "./routes/index.js";
+import apiError from "./utils/apiError.js";
 
 const app = express();
 app.use(express.json());
@@ -13,8 +14,11 @@ app.get("/error", (req, res) => {
   err.statusCode = 500;
   throw err;
 });
-app.use(errorHandler);
 
 app.use("/api/v1", v1router);
+app.use((req, res, next) => {
+  next(new apiError(404, "Route not found"));
+});
+app.use(errorHandler);
 
 export default app;

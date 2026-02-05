@@ -1,37 +1,30 @@
-import { User } from "../models/user.model.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
-
+import { adminLoginService } from "../services/adminlogin.service.js";
 const adminLogin = async (req, res) => {
   try {
+    console.log("Admin login attempt:", req.body);
     const { email, password } = req.body;
     if (!email || !password) {
       throw new apiError(400, "Email and password are required");
     }
-    const user = await User.findOne({ email, role: "admin" });
-    if (!user) {
-      throw new apiError(404, "Admin not found");
-    }
+    const { user, accessToken, refreshToken } = await adminLoginService(
+      email,
+      password
+    );
 
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      throw new apiError(401, "Invalid credentials");
-    }
-
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
-
-    user.refreshToken = refreshToken;
-    await user.save();
     res.status(200).json(
-      new apiResponse(true, "Login successful", {
+      new apiResponse(200, "Login successful", {
         user,
         accessToken,
         refreshToken,
       })
     );
   } catch (error) {
-    throw new apiError(500, "Internal Server Error");
+    throw new apiError(
+      error.statusCode || 500,
+      error.message || "Login failed"
+    );
   }
 };
 
