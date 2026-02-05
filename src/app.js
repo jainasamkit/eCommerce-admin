@@ -1,5 +1,7 @@
 import express from "express";
 import { errorHandler } from "./middleware/errorHandler.js";
+import v1router from "./routes/index.js";
+
 const app = express();
 app.use(express.json());
 app.get("/", (req, res) => {
@@ -13,7 +15,6 @@ app.get("/error", (req, res) => {
 });
 app.use(errorHandler);
 
-import v1router from "./routes/index.js";
 app.use("/api/v1", v1router);
 
 export default app;

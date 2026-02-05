@@ -2,12 +2,7 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import {
-  ACCESS_SECRET,
-  ACCESS_EXPIRY,
-  REFRESH_SECRET,
-  REFRESH_EXPIRY,
-} from "../config/env.js";
+import env from "../config/env.js";
 const userSchema = new Schema(
   {
     email: { type: String, required: true, unique: true },
@@ -42,9 +37,9 @@ userSchema.methods.generateAccessToken = function () {
       email: this.email,
       name: this.name,
     },
-    ACCESS_SECRET,
+    env.ACCESS_SECRET,
     {
-      expiresIn: ACCESS_EXPIRY,
+      expiresIn: env.ACCESS_EXPIRY,
     }
   );
 };
@@ -53,9 +48,9 @@ userSchema.methods.generateRefreshToken = function () {
     {
       _id: this._id,
     },
-    REFRESH_SECRET,
+    env.REFRESH_SECRET,
     {
-      expiresIn: REFRESH_EXPIRY,
+      expiresIn: env.REFRESH_EXPIRY,
     }
   );
 };

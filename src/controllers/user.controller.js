@@ -1,34 +1,6 @@
 import { User } from "../models/user.model.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
-const createAdmin = async (req, res) => {
-  try {
-    const { email, password, name } = req.body;
-
-    if (!email || !password || !name) {
-      throw new apiError(400, "Email, password and name are required");
-    }
-
-    const existingAdmin = await User.findOne({ email, role: "admin" });
-    if (existingAdmin) {
-      throw new apiError(400, "Email is already registered as admin");
-    }
-
-    const newAdmin = new User({
-      email,
-      password,
-      name,
-      role: "admin",
-    });
-    await newAdmin.save();
-
-    res
-      .status(201)
-      .json(new apiResponse(true, "Admin created successfully", newAdmin));
-  } catch (error) {
-    throw new apiError(500, "Internal Server Error");
-  }
-};
 
 const adminLogin = async (req, res) => {
   try {
@@ -63,4 +35,4 @@ const adminLogin = async (req, res) => {
   }
 };
 
-export { createAdmin, adminLogin };
+export { adminLogin };
