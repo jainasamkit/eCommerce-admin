@@ -1,4 +1,3 @@
-// middleware/validateRequest.js
 import apiError from "../utils/apiError.js";
 
 export const validateRequest = (schema) => (req, res, next) => {
@@ -8,6 +7,6 @@ export const validateRequest = (schema) => (req, res, next) => {
     return next(new apiError(400, message));
   }
 
-  req.body = result.data; // sanitized & typed
+  req.body = result.data;
   next();
 };

@@ -1,4 +1,3 @@
-// validators/adminLogin.schema.js
 import { z } from "zod";
 
 export const adminLoginSchema = z.object({

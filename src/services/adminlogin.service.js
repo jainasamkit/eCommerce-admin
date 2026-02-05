@@ -1,4 +1,3 @@
-//function to handle admin login
 import { findUserByEmail, findUserById } from "./db.service.js";
 import { generateAccessToken, generateRefreshToken } from "./jwt.service.js";
 const adminLoginService = async (email, password) => {
