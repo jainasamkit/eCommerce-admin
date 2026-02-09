@@ -10,9 +10,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/error", (req, res) => {
-  const err = new Error("This is a test error");
-  err.statusCode = 500;
-  throw err;
+  throw new ApiError.internal("This is a test error");
 });
 
 app.use("/api/v1", v1router);

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { adminLogin } from "../../controllers/user.controller.js";
 import { validateRequest } from "../../middleware/validateRequest.js";
-import { adminLoginSchema } from "../../middleware/schema/adminLogin.schema.js";
+import { adminLoginSchema } from "../../middleware/schema/user.schema.js";
 
 const router = Router();
 

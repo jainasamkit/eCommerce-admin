@@ -1,13 +1,11 @@
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import { adminLoginService } from "../services/adminlogin.service.js";
+import { adminLoginService } from "../services/user.service.js";
+
 const adminLogin = async (req, res) => {
   try {
-    console.log("Admin login attempt:", req.body);
     const { email, password } = req.body;
-    if (!email || !password) {
-      throw ApiError.badRequest("Email and password are required");
-    }
+
     const { user, accessToken, refreshToken } = await adminLoginService(
       email,
       password
@@ -21,10 +19,23 @@ const adminLogin = async (req, res) => {
       })
     );
   } catch (error) {
-    throw new ApiError(
-      error.statusCode || 500,
-      error.message || "Login failed"
-    );
+    if (error.message === "USER_NOT_FOUND") {
+      throw ApiError.notFound("User not found");
+    }
+
+    if (error.message === "ACCESS_DENIED") {
+      throw ApiError.forbidden("Access denied");
+    }
+
+    if (error.message === "INVALID_CREDENTIALS") {
+      throw ApiError.unauthorized("Invalid credentials");
+    }
+
+    if (error.message === "USER_SAVE_FAILED") {
+      throw ApiError.internal("Failed to save user");
+    }
+
+    throw ApiError.internal("Login failed");
   }
 };
 
