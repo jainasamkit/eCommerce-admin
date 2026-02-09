@@ -1,7 +1,7 @@
 import express from "express";
 import { errorHandler } from "./middleware/errorHandler.js";
 import v1router from "./routes/index.js";
-import ApiError from "./utils/ApiError.js";
+import ApiError from "./utils/apiError.js";
 
 const app = express();
 app.use(express.json());
