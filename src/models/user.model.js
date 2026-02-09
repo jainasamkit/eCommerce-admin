@@ -13,6 +13,7 @@ const userSchema = new Schema(
       default: "user",
       required: true,
     },
+    status: { type: String, enum: ["active", "inactive"], default: "active" },
     refreshToken: { type: String },
   },
   { timestamps: true }
