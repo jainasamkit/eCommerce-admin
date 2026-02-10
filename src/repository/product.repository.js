@@ -1,14 +1,28 @@
 import { Product } from "../models/product.model.js";
 
 const findProductById = async (id) => {
-  const product = await Product.findById(id);
+  try {
+    const product = await Product.findById(id);
 
-  if (!product) {
-    const error = new Error("PRODUCT_NOT_FOUND");
-    throw error;
+    if (!product) {
+      const error = new Error("PRODUCT_NOT_FOUND");
+      throw error;
+    }
+    if (product.isDeleted) {
+      const error = new Error("PRODUCT_DELETED");
+      throw error;
+    }
+
+    return product;
+  } catch (error) {
+    if (error.message === "PRODUCT_NOT_FOUND") {
+      throw new Error("PRODUCT_NOT_FOUND");
+    }
+    if (error.message === "PRODUCT_DELETED") {
+      throw new Error("PRODUCT_DELETED");
+    }
+    throw new Error("PRODUCT_FETCH_FAILED");
   }
-
-  return product;
 };
 
 const saveProduct = async (product) => {
@@ -37,4 +51,23 @@ const getProducts = async () => {
   }
 };
 
-export { findProductById, saveProduct, createProduct, getProducts };
+const partialUpdateProduct = async (id, productData) => {
+  try {
+    const product = await findProductById(id);
+    Object.assign(product, productData);
+    return await saveProduct(product);
+  } catch (error) {
+    if (error.message === "PRODUCT_NOT_FOUND") {
+      throw new Error("PRODUCT_NOT_FOUND");
+    }
+    throw new Error("PRODUCT_UPDATE_FAILED");
+  }
+};
+
+export {
+  findProductById,
+  saveProduct,
+  createProduct,
+  getProducts,
+  partialUpdateProduct,
+};

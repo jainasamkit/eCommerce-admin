@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createProductSchema = z.object({
+const createProductSchema = z.object({
   name: z
     .string({
       required_error: "Name is required",
@@ -72,12 +72,6 @@ export const createProductSchema = z.object({
     .max(100, "Discount cannot be more than 100")
     .optional(),
 
-  isDeleted: z
-    .boolean({
-      invalid_type_error: "isDeleted must be a boolean",
-    })
-    .optional(),
-
   createdBy: z
     .string({
       invalid_type_error: "createdBy must be a valid ObjectId",
@@ -85,3 +79,7 @@ export const createProductSchema = z.object({
     .regex(/^[0-9a-fA-F]{24}$/, "Invalid user id")
     .optional(),
 });
+
+const updateProductSchema = createProductSchema.partial();
+
+export { createProductSchema, updateProductSchema };

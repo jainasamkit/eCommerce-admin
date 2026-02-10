@@ -1,13 +1,13 @@
-import ApiError from "../error/ApiError.js";
+import ApiError from "../utils/apiError.js";
 import jwt from "jsonwebtoken";
-
+import { ACCESS_SECRET } from "../config/env.js";
 export const verifyToken = (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token || token === "") {
       throw new Error("TOKEN_NOT_PROVIDED");
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, ACCESS_SECRET);
     if (!decoded) {
       throw new Error("TOKEN_INVALID");
     }
