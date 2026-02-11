@@ -1,4 +1,4 @@
-import ApiError from "../utils/ApiError.js";
+import ApiError from "../utils/apiError.js";
 
 export const validateRequest = (schema) => (req, res, next) => {
   const result = schema.safeParse(req.body);
