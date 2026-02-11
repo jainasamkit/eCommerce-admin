@@ -11,23 +11,25 @@ import {
   createProductSchema,
   updateProductSchema,
 } from "../../middleware/schema/product.schema.js";
-import { verifyToken } from "../../middleware/auth.middleware.js";
+import { verifyToken, verifyAdmin } from "../../middleware/auth.middleware.js";
 
 const router = Router();
 
-router.get("/", getProducts);
+router.get("", verifyToken, verifyAdmin, getProducts);
 router.post(
-  "/add",
+  "",
   verifyToken,
+  verifyAdmin,
   validateRequest(createProductSchema),
   addProduct
 );
-router.get("/:id", getProductById);
+router.get("/:id", verifyToken, verifyAdmin, getProductById);
 router.put(
   "/:id",
   verifyToken,
+  verifyAdmin,
   validateRequest(updateProductSchema),
   updateProduct
 );
-router.delete("/:id", verifyToken, deleteProduct);
+router.delete("/:id", verifyToken, verifyAdmin, deleteProduct);
 export default router;

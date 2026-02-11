@@ -8,10 +8,10 @@ import {
 } from "../services/product.service.js";
 const addProduct = async (req, res) => {
   try {
-    const productdata = req.body;
-    productdata.isDeleted = false;
+    const productData = req.body;
+
     const userId = req.user.id;
-    const product = await addProductService(productdata, userId);
+    const product = await addProductService(productData, userId);
     return res
       .status(201)
       .json(new ApiResponse(201, "Product added successfully", product));
@@ -28,10 +28,17 @@ const addProduct = async (req, res) => {
 
 const getProducts = async (req, res) => {
   try {
-    const products = await getProductsService();
-    return res
-      .status(200)
-      .json(new ApiResponse(true, "Products fetched successfully", products));
+    const { page = 1, limit = 10 } = req.query;
+    const { products, total } = await getProductsService(page, limit);
+
+    return res.status(200).json(
+      new ApiResponse(true, "Products fetched successfully", {
+        page,
+        limit,
+        products,
+        total,
+      })
+    );
   } catch (error) {
     if (error.message === "PRODUCT_FETCH_FAILED") {
       throw ApiError.internal("Failed to fetch products");
@@ -44,21 +51,13 @@ const getProductById = async (req, res) => {
   const { id } = req.params;
   try {
     const product = await getProductByIdService(id);
-    console.log(product);
-    if (!product) {
-      throw ApiError.notFound("Product not found");
-    }
+
     return res
       .status(200)
       .json(new ApiResponse(200, "Product fetched successfully", product));
   } catch (error) {
     if (error.message === "PRODUCT_NOT_FOUND") {
       throw ApiError.notFound("Product not found");
-    }
-    if (error.message === "PRODUCT_DELETED") {
-      console.log("final hello");
-
-      throw ApiError.notFound("Product has been deleted");
     }
     throw ApiError.internal("Error Fetching Product");
   }
@@ -78,10 +77,6 @@ const updateProduct = async (req, res) => {
     if (error.message === "PRODUCT_NOT_FOUND") {
       throw ApiError.notFound("Product not found");
     }
-    if (error.message === "PRODUCT_DELETED") {
-      throw ApiError.notFound("Product has been deleted");
-    }
-
     throw ApiError.internal("Error Updating Product");
   }
 };
@@ -100,10 +95,6 @@ const deleteProduct = async (req, res) => {
     if (error.message === "PRODUCT_NOT_FOUND") {
       throw ApiError.notFound("Product not found");
     }
-    if (error.message === "PRODUCT_DELETED") {
-      throw ApiError.notFound("Product has already been deleted");
-    }
-
     throw ApiError.internal("Error Deleting Product");
   }
 };

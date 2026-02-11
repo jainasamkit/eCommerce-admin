@@ -1,7 +1,7 @@
 import ApiError from "../utils/apiError.js";
 import jwt from "jsonwebtoken";
 import { ACCESS_SECRET } from "../config/env.js";
-export const verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token || token === "") {
@@ -23,3 +23,19 @@ export const verifyToken = (req, res, next) => {
     throw ApiError.internal("Cant verify token.");
   }
 };
+
+const verifyAdmin = (req, res, next) => {
+  try {
+    if (req.user.role !== "admin") {
+      throw new Error("ACCESS_DENIED");
+    }
+    next();
+  } catch (error) {
+    if (error.message === "ACCESS_DENIED") {
+      throw ApiError.forbidden("Access denied");
+    }
+    throw ApiError.internal("Error verifying admin access");
+  }
+};
+
+export { verifyToken, verifyAdmin };

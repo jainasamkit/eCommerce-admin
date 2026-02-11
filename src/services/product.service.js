@@ -1,59 +1,35 @@
 import {
   findProductById,
-  saveProduct,
   createProduct,
   getProducts,
-  partialUpdateProduct,
+  updateProduct,
 } from "../repository/product.repository.js";
 
 const addProductService = async (productData, userId) => {
-  try {
-    return await createProduct({ ...productData, createdBy: userId });
-  } catch (error) {
-    throw new Error("PRODUCT_CREATION_FAILED");
-  }
+  return await createProduct({ ...productData, createdBy: userId });
 };
 
-const getProductsService = async () => {
-  try {
-    return await getProducts();
-  } catch (error) {
-    throw new Error("PRODUCT_FETCH_FAILED");
-  }
+const getProductsService = async (page, limit) => {
+  const skip = (page - 1) * limit;
+  return await getProducts(skip, limit);
 };
 
 const getProductByIdService = async (id) => {
-  try {
-    const product = await findProductById(id);
-    if (!product) {
-      throw new Error("PRODUCT_NOT_FOUND");
-    }
-
-    return product;
-  } catch (error) {
-    if (error.message === "PRODUCT_NOT_FOUND") {
-      throw new Error("PRODUCT_NOT_FOUND");
-    }
-    if (error.message === "PRODUCT_DELETED") {
-      throw new Error("PRODUCT_DELETED");
-    }
-    throw new Error("PRODUCT_FETCH_FAILED");
+  const product = await findProductById(id);
+  if (!product) {
+    const error = new Error("PRODUCT_NOT_FOUND");
+    throw error;
   }
+  return product;
 };
 
 const updateProductService = async (id, productData) => {
-  try {
-    const product = await findProductById(id);
-    return await partialUpdateProduct(id, productData);
-  } catch (error) {
-    if (error.message === "PRODUCT_NOT_FOUND") {
-      throw new Error("PRODUCT_NOT_FOUND");
-    }
-    if (error.message === "PRODUCT_DELETED") {
-      throw new Error("PRODUCT_DELETED");
-    }
-    throw new Error("PRODUCT_UPDATE_FAILED");
+  const product = await updateProduct(id, productData);
+  if (!product) {
+    const error = new Error("PRODUCT_NOT_FOUND");
+    throw error;
   }
+  return product;
 };
 export {
   addProductService,

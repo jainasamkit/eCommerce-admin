@@ -71,13 +71,6 @@ const createProductSchema = z.object({
     .min(0, "Discount cannot be negative")
     .max(100, "Discount cannot be more than 100")
     .optional(),
-
-  createdBy: z
-    .string({
-      invalid_type_error: "createdBy must be a valid ObjectId",
-    })
-    .regex(/^[0-9a-fA-F]{24}$/, "Invalid user id")
-    .optional(),
 });
 
 const updateProductSchema = createProductSchema.partial();
