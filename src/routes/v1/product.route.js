@@ -11,25 +11,17 @@ import {
   createProductSchema,
   updateProductSchema,
 } from "../../middleware/schema/product.schema.js";
-import { verifyToken, verifyAdmin } from "../../middleware/auth.middleware.js";
+import {
+  authenticateAdmin,
+  authoriseAdmin,
+} from "../../middleware/auth.middleware.js";
 
 const router = Router();
 
-router.get("", verifyToken, verifyAdmin, getProducts);
-router.post(
-  "",
-  verifyToken,
-  verifyAdmin,
-  validateRequest(createProductSchema),
-  addProduct
-);
-router.get("/:id", verifyToken, verifyAdmin, getProductById);
-router.put(
-  "/:id",
-  verifyToken,
-  verifyAdmin,
-  validateRequest(updateProductSchema),
-  updateProduct
-);
-router.delete("/:id", verifyToken, verifyAdmin, deleteProduct);
+router.use(authenticateAdmin, authoriseAdmin);
+router.get("", getProducts);
+router.post("", validateRequest(createProductSchema), addProduct);
+router.get("/:id", getProductById);
+router.put("/:id", validateRequest(updateProductSchema), updateProduct);
+router.delete("/:id", deleteProduct);
 export default router;

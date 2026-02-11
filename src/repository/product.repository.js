@@ -1,8 +1,7 @@
 import { Product } from "../models/product.model.js";
 
 const findProductById = async (id) => {
-  const product = await Product.findOne({ _id: id, isDeleted: false });
-  return product;
+  return await Product.findOne({ _id: id, isDeleted: false });
 };
 
 const createProduct = async (productData) => {
@@ -19,12 +18,11 @@ const getProducts = async (skip, limit) => {
 };
 
 const updateProduct = async (id, productData) => {
-  const product = await Product.findByIdAndUpdate(
+  return await Product.findByIdAndUpdate(
     id,
     { $set: productData },
     { new: true, runValidators: true }
   );
-  return product;
 };
 
-export { findProductById, createProduct, getProducts, updateProduct };
+export default { findProductById, createProduct, getProducts, updateProduct };

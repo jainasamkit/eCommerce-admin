@@ -1,7 +1,7 @@
 import ApiError from "../utils/apiError.js";
 import jwt from "jsonwebtoken";
 import { ACCESS_SECRET } from "../config/env.js";
-const verifyToken = (req, res, next) => {
+const authenticateAdmin = (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token || token === "") {
@@ -24,7 +24,7 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-const verifyAdmin = (req, res, next) => {
+const authoriseAdmin = (req, res, next) => {
   try {
     if (req.user.role !== "admin") {
       throw new Error("ACCESS_DENIED");
@@ -38,4 +38,4 @@ const verifyAdmin = (req, res, next) => {
   }
 };
 
-export { verifyToken, verifyAdmin };
+export { authenticateAdmin, authoriseAdmin };
