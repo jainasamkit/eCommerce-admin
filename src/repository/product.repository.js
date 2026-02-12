@@ -6,7 +6,7 @@ const findProductById = async (id) => {
 
 const createProduct = async (productData) => {
   const product = new Product(productData);
-  return await saveProduct(product);
+  return await product.save();
 };
 
 const getProducts = async (skip, limit) => {

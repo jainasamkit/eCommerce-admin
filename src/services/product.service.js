@@ -1,10 +1,11 @@
 import productRepository from "../repository/product.repository.js";
 
-const addProduct = async (productData, userId) => {
+const addProduct = async (productData, userId, files) => {
   try {
     return await productRepository.createProduct({
       ...productData,
       createdBy: userId,
+      images: files.map((file) => file.path),
     });
   } catch (error) {
     throw error;
