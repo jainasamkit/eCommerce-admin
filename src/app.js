@@ -13,11 +13,6 @@ app.get("/error", (req, res) => {
   throw new ApiError.internal("This is a test error");
 });
 
-app.post("/upload-multiple", upload.array("files"), (req, res) => {
-  // Handle multiple file uploads
-  res.send(req.files);
-});
-
 app.use("/api/v1", v1router);
 app.use((req, res, next) => {
   throw ApiError.notFound("Endpoint not found");

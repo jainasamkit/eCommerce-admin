@@ -7,7 +7,11 @@ const addProduct = async (req, res) => {
 
     const files = req.files;
     const userId = req.user.id;
-    const product = await productService.addProduct(productData, userId, files);
+    const product = await productService.addProduct({
+      productData,
+      userId,
+      files,
+    });
     return res
       .status(201)
       .json(new ApiResponse(201, "Product added successfully", product));

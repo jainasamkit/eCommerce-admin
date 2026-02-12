@@ -6,7 +6,7 @@ class ApiError extends Error {
     this.success = false;
     this.errors = errors;
 
-    // Error.captureStackTrace(this, this.constructor);
+    Error.captureStackTrace(this, this.constructor);
   }
 
   static badRequest(message = "Bad Request", errors = []) {

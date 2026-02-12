@@ -1,6 +1,6 @@
 import productRepository from "../repository/product.repository.js";
 import { uploadR2 } from "../utils/uploadR2.js";
-const addProduct = async (productData, userId, files) => {
+const addProduct = async ({ productData, userId, files }) => {
   try {
     if (files) {
       for (const file of files) {
@@ -14,7 +14,7 @@ const addProduct = async (productData, userId, files) => {
     return await productRepository.createProduct({
       ...productData,
       createdBy: userId,
-      images: files.map((file) => file.path),
+      images: files?.map((file) => file.path),
     });
   } catch (error) {
     throw error;
