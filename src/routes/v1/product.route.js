@@ -15,12 +15,18 @@ import {
   authenticateAdmin,
   authoriseAdmin,
 } from "../../middleware/auth.middleware.js";
+import upload from "../../middleware/multer.middleware.js";
 
 const router = Router();
 
 router.use(authenticateAdmin, authoriseAdmin);
 router.get("", getProducts);
-router.post("", validateRequest(createProductSchema), addProduct);
+router.post(
+  "",
+  upload.array("images"),
+  validateRequest(createProductSchema),
+  addProduct
+);
 router.get("/:id", getProductById);
 router.put("/:id", validateRequest(updateProductSchema), updateProduct);
 router.delete("/:id", deleteProduct);

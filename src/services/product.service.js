@@ -1,10 +1,20 @@
 import productRepository from "../repository/product.repository.js";
-
-const addProduct = async (productData, userId) => {
+import { uploadR2 } from "../utils/uploadR2.js";
+const addProduct = async ({ productData, userId, files }) => {
   try {
+    if (files) {
+      for (const file of files) {
+        if (!file.mimetype.startsWith("image/")) {
+          throw Error("INVALID_FILE_TYPE");
+        }
+        const r2Url = await uploadR2(file.path);
+        file.path = r2Url;
+      }
+    }
     return await productRepository.createProduct({
       ...productData,
       createdBy: userId,
+      images: files?.map((file) => file.path),
     });
   } catch (error) {
     throw error;

@@ -17,14 +17,14 @@ const createProductSchema = z.object({
     .trim()
     .min(1, "Description is required"),
 
-  quantity: z
+  quantity: z.coerce
     .number({
       required_error: "Quantity is required",
       invalid_type_error: "Quantity must be a number",
     })
     .min(0, "Quantity cannot be negative"),
 
-  price: z
+  price: z.coerce
     .number({
       required_error: "Price is required",
       invalid_type_error: "Price must be a number",
@@ -64,7 +64,7 @@ const createProductSchema = z.object({
     )
     .optional(),
 
-  discount: z
+  discount: z.coerce
     .number({
       invalid_type_error: "Discount must be a number",
     })
