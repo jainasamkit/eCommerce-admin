@@ -6,7 +6,6 @@ const addProduct = async (req, res) => {
     const productData = req.body;
 
     const files = req.files;
-
     const userId = req.user.id;
     const product = await productService.addProduct(productData, userId, files);
     return res

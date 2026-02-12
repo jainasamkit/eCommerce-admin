@@ -13,6 +13,7 @@ const env = {
   R2_SECRET_KEY: process.env.R2_SECRET_KEY,
   R2_ENDPOINT: process.env.R2_ENDPOINT,
   R2_BUCKET: process.env.R2_BUCKET,
+  R2_PUBLIC_URL: process.env.R2_PUBLIC_URL,
 };
 
 export const {
@@ -26,4 +27,5 @@ export const {
   R2_SECRET_KEY,
   R2_ENDPOINT,
   R2_BUCKET,
+  R2_PUBLIC_URL,
 } = env;
